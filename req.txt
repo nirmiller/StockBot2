@@ -1,0 +1,5 @@
+tensorflow 
+stockstats
+keras 
+pandas-datareader
+opencv-python
