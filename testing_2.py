@@ -37,7 +37,7 @@ for t in range(TIME_RANGE, l):
     reward = 0
     close = data[0][t]
 
-    buy = math.floor(equity / close)
+    buy = 1000
     sell = agent.inventory
     # print("Close = {}  :   Open = {}  :  Volume = {}".format(close, data[1][t], data[2][t]))
 
@@ -46,13 +46,13 @@ for t in range(TIME_RANGE, l):
     if t == TIME_RANGE:
         initial_equity = equity
 
-    if action == 1 and equity - (buy * close) > 0:  # buy
+    if action == 0 and equity - (buy * close) > 0:  # buy
         equity -= buy * close
         agent.inventory += buy
         sell_option = 1
         print("Buy: {} Amount : {}".format(close, buy))
         reward = 5000
-    elif action == 2:  # sell
+    elif action == 1:  # sell
         equity += sell * close
         change_equity = equity - initial_equity
         initial_profit = total_profit
