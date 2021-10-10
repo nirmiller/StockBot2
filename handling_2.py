@@ -260,16 +260,15 @@ class Agent:
     def create_model(self):
         input_shape_1 = (self.time_range, self.price_range, 3)
 
-        base_model = tf.keras.applications.resnet50.ResNet50(include_top=False, weights=None, input_shape=input_shape_1)
+        model = Sequential()
+        model.add(Conv2D(32, kernel_size=(8, 8), activation='relu', input_shape=input_shape_1))
+        model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        model.add(Flatten())
+        model.add(Dense(128, activation='relu'))
+        model.add(Dense(self.action_size, activation='linear'))
 
-        x = base_model.output
-        x = GlobalAveragePooling2D()(x)
-
-        predictions = Dense(self.action_size, activation='linear')(x)
-
-        model = Model(inputs=base_model.inputs, outputs=predictions)
-
-        model.compile(loss='mse', optimizer=Adam(lr=.01), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(lr=.001), metrics=['accuracy'])
         return model
 
     def act(self, state):
