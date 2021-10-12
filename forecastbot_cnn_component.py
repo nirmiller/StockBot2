@@ -113,7 +113,7 @@ def create_model(TIME_RANGE, PRICE_RANGE):
   
   input_shape_1 = (TIME_RANGE, PRICE_RANGE, 3)
 
-  base_model = tf.keras.applications.resnet50.ResNet50( include_top=False, weights=None, input_shape=input_shape_1)
+  base_model = tf.keras.applications.resnet50.ResNet50(include_top=False, weights=None, input_shape=input_shape_1)
 
   action_size = 3
 
