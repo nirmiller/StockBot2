@@ -37,7 +37,7 @@ for t in range(TIME_RANGE, l):
     reward = 0
     close = data[0][t]
 
-    buy = 1000
+    buy = 10
     sell = agent.inventory
     # print("Close = {}  :   Open = {}  :  Volume = {}".format(close, data[1][t], data[2][t]))
 
