@@ -87,12 +87,12 @@ for e in range(episode_count + 1):
         if t == TIME_RANGE:
             initial_equity = equity
 
-        if action == 1 and equity - (buy * close) > 0:  # buy
+        if action == 0:  # buy
             equity -= buy * close
             agent.inventory += buy
             sell_option = 1
             print("Buy: {} Amount : {}".format(close, buy))
-        elif action == 2:  # sell
+        elif action == 1 and agent.inventory >= sell :  # sell
             equity += sell * close
             change_equity = equity - initial_equity
             initial_profit = total_profit
