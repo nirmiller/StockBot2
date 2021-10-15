@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+
 plt.style.use('fivethirtyeight')
 
 import time
@@ -7,7 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas_datareader as pdr
-from stockstats import*
+from stockstats import *
 import cv2
 from PIL import Image
 
@@ -26,20 +27,22 @@ import math
 
 TIME_RANGE, PRICE_RANGE = 40, 40
 
+
 def scale_list(l, to_min, to_max):
     def scale_number(unscaled, to_min, to_max, from_min, from_max):
-        return (to_max-to_min)*(unscaled-from_min)/(from_max-from_min)+to_min
+        return (to_max - to_min) * (unscaled - from_min) / (from_max - from_min) + to_min
 
     if len(set(l)) == 1:
-        return [np.floor((to_max + to_min)/2)] * len(l)
+        return [np.floor((to_max + to_min) / 2)] * len(l)
     else:
         return [scale_number(i, to_min, to_max, min(l), max(l)) for i in l]
+
 
 def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
     closing_values = data[0]
     macd = data[1]
     macds = data[2]
-    #print(closing_values)
+    # print(closing_values)
     half_scale_size = int(PRICE_RANGE / 2)
 
     graph_closing_values = list(np.round(scale_list(closing_values[t - TIME_RANGE:t], 0, half_scale_size - 1), 0))
@@ -52,16 +55,16 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
     x_ind = 0
     for s, d in zip(graph_macds, graph_macd):
         blank_matrix_macd[int(s), x_ind] = (0, 0, 255)
-        blank_matrix_macd[int(d), x_ind] = (255, 175,0)
+        blank_matrix_macd[int(d), x_ind] = (255, 175, 0)
         x_ind += 1
     blank_matrix_macd = blank_matrix_macd[::-1]
 
     blank_matrix_close = np.zeros((half_scale_size, TIME_RANGE, 3), dtype=np.uint8)
     x_ind = 0
     if sell_option == 1:
-      close_color = (0, 255, 0) #GREEN
+        close_color = (0, 255, 0)  # GREEN
     else:
-      close_color = (255,0 , 0) #RED
+        close_color = (255, 0, 0)  # RED
 
     for v in graph_closing_values:
         blank_matrix_close[int(v), x_ind] = close_color
@@ -105,35 +108,39 @@ def getStockData(key):
 
     return return_data
 
+
 # prints formatted price
 def formatPrice(n):
-	return ("-$" if n < 0 else "$") + "{0:.2f}".format(abs(n))
+    return ("-$" if n < 0 else "$") + "{0:.2f}".format(abs(n))
+
 
 def getBotPeformance(raw_data, window_size):
-	#DATA is peformance data of bot, so : Total Profit made by bot in percent
-	#DATA = total_profit |  initial_profit *should only change if bot is selling
-	raw_data = np.array(raw_data)
-	data = (raw_data[0])/(abs(raw_data[1]))
-  #ADD more transformations later
-	for i in range(data.shape[0]):
-		if math.isnan(data[i]):
-			data[i] = 0
-		#data[i] = sigmoid(data[i])
+    # DATA is peformance data of bot, so : Total Profit made by bot in percent
+    # DATA = total_profit |  initial_profit *should only change if bot is selling
+    raw_data = np.array(raw_data)
+    data = (raw_data[0]) / (abs(raw_data[1]))
+    # ADD more transformations later
+    for i in range(data.shape[0]):
+        if math.isnan(data[i]):
+            data[i] = 0
+    # data[i] = sigmoid(data[i])
+
+    return_data = []
+    if data.shape[0] >= window_size:
+        return_data = data[-window_size:]
+    else:
+        d = (window_size - data.shape[0] + 1)
+        return_data = np.concatenate((data[0:-1], d * [data[-1]]), axis=None)
+    return return_data
 
 
-	return_data = []
-	if data.shape[0] >= window_size:
-		return_data = data[-window_size:]
-	else:
-		d = (window_size - data.shape[0] + 1)
-		return_data = np.concatenate((data[0:-1], d*[data[-1]]), axis=None)
-	return return_data
 def fix_input(state):
-	state = np.array(state)
-	img_rows, img_cols = TIME_RANGE, PRICE_RANGE
-	state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
-	state = state.astype('float32')
-	return state
+    state = np.array(state)
+    img_rows, img_cols = TIME_RANGE, PRICE_RANGE
+    state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
+    state = state.astype('float32')
+    return state
+
 
 import keras
 from keras.models import Sequential
@@ -142,83 +149,84 @@ from keras.layers import Dense, LSTM, Dropout
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 
+
 class F_Bot:
-	def __init__(self, window_size, model_name=""):
-		self.model_name = model_name
-		self.window_size = window_size
-		self.forecast_model = self._model(self.window_size)
-	def _model(self, window_size):
-		forecast_model = Sequential()
-		forecast_model.add(LSTM(128, return_sequences= True, input_shape = (window_size, 5)))
-		forecast_model.add(LSTM(64, return_sequences= True))
-		forecast_model.add(LSTM(64, return_sequences= False))
-		forecast_model.add(Dense(units=1,  activation='linear'))
-		forecast_model.compile(optimizer=Adam(lr=.0001),loss='mean_squared_error')
-		forecast_model.load_weights("forecast/model_pi_1_5")
-		return forecast_model
+    def __init__(self, window_size, model_name=""):
+        self.model_name = model_name
+        self.window_size = window_size
+        self.forecast_model = self._model(self.window_size)
 
-	def getForecastData(self, stocks):
-		forecast = []
-		window_size = self.window_size
-		#Use F-Bot to calculate the n* forecasting values for the n* # of stocks
-		number_stocks = len(stocks)
-		for i in range(0, number_stocks):
-			stock = stocks[i]
-			df = pdr.get_data_tiingo(stock, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
-			data = df.filter(['close', 'open', 'high', 'low'])
-			data = data[30:-1]
-			dataset = data.values
-			normalizer = Normalizer()
-			scaler = RobustScaler()
-			standard = MinMaxScaler(feature_range=(0,1))
-			#normalizer = Normalizer()
-			scaled_data = normalizer.fit_transform(dataset)
-			scaled_data = scaler.fit_transform(scaled_data)
-			scaled_data = standard.fit_transform(scaled_data)
+    def _model(self, window_size):
+        forecast_model = Sequential()
+        forecast_model.add(LSTM(128, return_sequences=True, input_shape=(window_size, 5)))
+        forecast_model.add(LSTM(64, return_sequences=True))
+        forecast_model.add(LSTM(64, return_sequences=False))
+        forecast_model.add(Dense(units=1, activation='linear'))
+        forecast_model.compile(optimizer=Adam(lr=.0001), loss='mean_squared_error')
+        forecast_model.load_weights("forecast/model_pi_1_5")
+        return forecast_model
 
-		#VOLUME DATA
+    def getForecastData(self, stocks):
+        forecast = []
+        window_size = self.window_size
+        # Use F-Bot to calculate the n* forecasting values for the n* # of stocks
+        number_stocks = len(stocks)
+        for i in range(0, number_stocks):
+            stock = stocks[i]
+            df = pdr.get_data_tiingo(stock, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
+            data = df.filter(['close', 'open', 'high', 'low'])
+            data = data[30:-1]
+            dataset = data.values
+            normalizer = Normalizer()
+            scaler = RobustScaler()
+            standard = MinMaxScaler(feature_range=(0, 1))
+            # normalizer = Normalizer()
+            scaled_data = normalizer.fit_transform(dataset)
+            scaled_data = scaler.fit_transform(scaled_data)
+            scaled_data = standard.fit_transform(scaled_data)
 
-			v_data = df.filter(['volume'])
-			v_data = v_data[30:-1].values
-			volume_data = []
-			for i in range(len(dataset)- 1):
-				volume_data.append(v_data[i + 1] - v_data[i])
+            # VOLUME DATA
 
-			s = MinMaxScaler(feature_range=(-1, 1))
+            v_data = df.filter(['volume'])
+            v_data = v_data[30:-1].values
+            volume_data = []
+            for i in range(len(dataset) - 1):
+                volume_data.append(v_data[i + 1] - v_data[i])
 
-			volume_data = np.array(volume_data)
-			volume_data = np.reshape(volume_data, (volume_data.shape[0], 1))
+            s = MinMaxScaler(feature_range=(-1, 1))
 
-			scaled_volume = s.fit_transform(volume_data)
+            volume_data = np.array(volume_data)
+            volume_data = np.reshape(volume_data, (volume_data.shape[0], 1))
 
-			scaled_volume = np.reshape(scaled_volume, (1, scaled_volume.shape[0]))
+            scaled_volume = s.fit_transform(volume_data)
 
-			volume_vals = scaled_volume[0].tolist()
+            scaled_volume = np.reshape(scaled_volume, (1, scaled_volume.shape[0]))
 
-			volume_vals = np.array(volume_vals)
+            volume_vals = scaled_volume[0].tolist()
 
-			#------------------------------------------------------------#
+            volume_vals = np.array(volume_vals)
 
+            # ------------------------------------------------------------#
 
-			train_data = scaled_data[0:-1, : ]
+            train_data = scaled_data[0:-1, :]
 
-			x_vals = [[], [], [], [], []]
+            x_vals = [[], [], [], [], []]
 
-			for i in range(window_size, len(train_data) - 1):
-				for j in range(0, train_data.shape[1] + 1):
-					if j <= train_data.shape[1] - 1:
-						x_vals[j].append(train_data[i - window_size: i, j])
-					else:
-						x_vals[j].append(volume_vals[i - window_size: i])
-			x_vals= np.array(x_vals)
+            for i in range(window_size, len(train_data) - 1):
+                for j in range(0, train_data.shape[1] + 1):
+                    if j <= train_data.shape[1] - 1:
+                        x_vals[j].append(train_data[i - window_size: i, j])
+                    else:
+                        x_vals[j].append(volume_vals[i - window_size: i])
+            x_vals = np.array(x_vals)
 
-			x_vals = np.reshape(x_vals, (x_vals.shape[1], x_vals.shape[2], x_vals.shape[0]))
-			predictions = self.forecast_model.predict(x_vals)
-			predictions = np.array(predictions)
-			predictions = np.reshape(predictions, (predictions.shape[1], predictions.shape[0]))
-			#print(predictions[0])
-			forecast.append(predictions[0])
-		return forecast
+            x_vals = np.reshape(x_vals, (x_vals.shape[1], x_vals.shape[2], x_vals.shape[0]))
+            predictions = self.forecast_model.predict(x_vals)
+            predictions = np.array(predictions)
+            predictions = np.reshape(predictions, (predictions.shape[1], predictions.shape[0]))
+            # print(predictions[0])
+            forecast.append(predictions[0])
+        return forecast
 
 
 import keras
@@ -245,8 +253,8 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.5
-        self.epsilon = 0.8
+        self.gamma = 0.9
+        self.epsilon = 0.9
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.9988
 
@@ -265,7 +273,7 @@ class Agent:
         model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
+        model.add(Dense(128))
         model.add(Dense(self.action_size, activation='linear'))
 
         model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
