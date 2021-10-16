@@ -3,7 +3,7 @@ from keras.models import load_model
 import os
 from handling_2 import  *
 
-stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_1_30"
+stock_name, model_name = "AMZN", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_1_50"
 model = load_model(model_name)
 window_size = model.layers[0].input.shape.as_list()[1]
 
