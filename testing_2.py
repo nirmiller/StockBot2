@@ -51,8 +51,7 @@ for t in range(TIME_RANGE, l):
         agent.inventory += buy
         sell_option = 1
         print("Buy: {} Amount : {}".format(close, buy))
-        reward = 5000
-    elif action == 1:  # sell
+    elif action == 1 and agent.inventory >= sell:  # sell
         equity += sell * close
         change_equity = equity - initial_equity
         initial_profit = total_profit
