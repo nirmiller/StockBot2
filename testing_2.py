@@ -3,7 +3,7 @@ from keras.models import load_model
 import os
 from handling_2 import  *
 
-stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_1_20"
+stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_1_30"
 model = load_model(model_name)
 window_size = model.layers[0].input.shape.as_list()[1]
 
@@ -37,7 +37,7 @@ for t in range(TIME_RANGE, l):
     reward = 0
     close = data[0][t]
 
-    buy = 10
+    buy = math.floor(equity / close)
     sell = agent.inventory
     # print("Close = {}  :   Open = {}  :  Volume = {}".format(close, data[1][t], data[2][t]))
 
