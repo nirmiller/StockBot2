@@ -89,5 +89,5 @@ for i in range(1, 9):
             equity_data.append(equity)
 
 
-for i in range(len(equity_data)):
+for i in range(1, len(equity_data) + 1):
     print(f"{i} : {equity_data[i]}")
