@@ -254,7 +254,7 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.95
-        self.epsilon = 0.9
+        self.epsilon = 0.5
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.9988
 
@@ -263,7 +263,7 @@ class Agent:
         else:
             self.model = self.create_model()
 
-        self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_1_90')
+        self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_2_20')
 
     def create_model(self):
         input_shape_1 = (self.time_range, self.price_range, 3)
