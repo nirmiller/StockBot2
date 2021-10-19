@@ -5,7 +5,7 @@ from handling_2 import *
 
 equity_data = []
 
-for i in range(1, 5):
+for i in range(1, 5 + 1):
     stock_name, model_name = "PLUG", f"/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_{i}0"
     model = load_model(model_name)
     window_size = model.layers[0].input.shape.as_list()[1]
