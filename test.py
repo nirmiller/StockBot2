@@ -1,44 +1,40 @@
-batch_size = 32
-sell_option = 0
+action = agent.act(state)
 
-state = getState(sell_option, 0, TIME_RANGE, PRICE_RANGE)
+if t % 2 != 0:
+    sell_option = 1
+else:
+    sell_option = 0
 
-for t in range(0, l):
+# sit
+next_state = getState(sell_option, t + 1, TIME_RANGE, PRICE_RANGE)
+# print(next_state)
+reward = 0
 
-    action = agent.act(state)
-
-    if t % 2 != 0:
-        sell_option = 1
+if action == 0:  # buy
+    if sell_option != 0:
+        reward = -1
     else:
-        sell_option = 0
+        reward = 1
+elif action == 1:  # sell
+    if sell_option != 1:
+        reward = -1
+    else:
+        reward = 1
 
-    # sit
-    next_state = getState(sell_option, t + 1, TIME_RANGE, PRICE_RANGE)
-    # print(next_state)
-    reward = 0
+print(f"Reward : {reward}")
+agent.total_inventory.append(agent.inventory)
 
-    if action == 0:  # buy
-        if sell_option != 0:
-            reward = -1
-        else:
-            reward = 1
-            correct += 1
-    elif action == 1:  # sell
-        if sell_option != 1:
-            reward = -1
-        else:
-            reward = 1
-            correct += 1
+done = True if t == l - 1 else False
+agent.memory.append((state, action, reward, next_state, done))
+state = next_state
 
-    print(f"Reward : {reward}")
-    agent.total_inventory.append(agent.inventory)
+if done:
+    print(e)
+    print("--------------------------------")
 
-    done = True if t == l - 1 else False
-    agent.memory.append((state, action, reward, next_state, done))
-    state = next_state
+if len(agent.memory) > batch_size:
+    agent.expReplay(batch_size)
+    print("REPLAY {}".format(agent.epsilon))
 
-    if done:
-        print(e)
-        print("--------------------------------")
-
-print(correct / l)
+if e % 5 == 0:
+    agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/test/test_{}".format(str(e)))
