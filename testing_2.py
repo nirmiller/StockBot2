@@ -5,10 +5,10 @@ import os
 from minute_handling import *
 
 stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_4_20"
-model = load_model(model_name)
-window_size = model.layers[0].input.shape.as_list()[1]
 
-agent = Agent(TIME_RANGE, PRICE_RANGE, True, model_name=model_name)
+agent = Agent(TIME_RANGE, PRICE_RANGE, is_eval=True, model_name=model_name)
+window_size = agent.model.layers[0].input.shape.as_list()[1]
+
 data = getStockData(stock_name)
 
 l = len(data[0])

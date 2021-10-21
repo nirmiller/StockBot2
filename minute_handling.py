@@ -84,13 +84,17 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
-    stock_data = pd.read_csv('StockBot2/data/PLUG.txt', parse_dates=True, index_col='Date')
+    stock_data = pd.read_csv('data/PLUG.txt', parse_dates=True, index_col='Date')
+
+    #print(stock_data['Close'].values)
+
+    close = stock_data['Close'].values
+    open = stock_data['Open'].values
 
     stats = StockDataFrame.retype(stock_data)
     stock_data['Symbol'] = key
 
-    stock_dif = (stock_data['Close'] - stock_data['Open'])
-    stock_dif = stock_dif.values
+    stock_dif = (close - open)
 
     noise_ma_smoother = 1
     macd = stats.get('macd')
@@ -104,7 +108,7 @@ def getStockData(key):
     macds = macds.fillna(method='bfill')
     macds = list(macds.values)
 
-    closing_values = list(np.array(stock_data[1]['Close']))
+    closing_values = list(np.array(close))
 
     return_data = [closing_values, macd, macds]
 
@@ -265,7 +269,7 @@ class Agent:
         else:
             self.model = self.create_model()
 
-        self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_50')
+        #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_50')
 
     def create_model(self):
         input_shape_1 = (self.time_range, self.price_range, 3)
@@ -307,3 +311,4 @@ class Agent:
             self.model.fit(state, target_f, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
+
