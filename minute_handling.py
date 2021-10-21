@@ -104,7 +104,7 @@ def getStockData(key):
     macds = macds.fillna(method='bfill')
     macds = list(macds.values)
 
-    closing_values = list(np.array(stock_data['Close']))
+    closing_values = list(np.array(stock_data[1]['Close']))
 
     return_data = [closing_values, macd, macds]
 
