@@ -73,7 +73,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 
     blank_matrix = np.vstack([blank_matrix_close, blank_matrix_macd])
 
-    if 1 == 2:
+    if 2 == 2:
         # graphed on matrix
         plt.imshow(blank_matrix)
         plt.show()
@@ -82,12 +82,14 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 
 
 def getStockData(key):
-    stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
+    #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
+
+    stock_data = pd.read_csv('StockBot\data/PLUG.txt', parse_dates=True, index_col='Date')
 
     stats = StockDataFrame.retype(stock_data)
     stock_data['Symbol'] = key
 
-    stock_dif = (stock_data['close'] - stock_data['open'])
+    stock_dif = (stock_data['Close'] - stock_data['Open'])
     stock_dif = stock_dif.values
 
     noise_ma_smoother = 1
@@ -102,7 +104,7 @@ def getStockData(key):
     macds = macds.fillna(method='bfill')
     macds = list(macds.values)
 
-    closing_values = list(np.array(stock_data['close']))
+    closing_values = list(np.array(stock_data['Close']))
 
     return_data = [closing_values, macd, macds]
 
