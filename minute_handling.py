@@ -85,7 +85,7 @@ def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
     stock_data = pd.read_csv('/content/StockBot2/data/SPCE.txt', parse_dates=True, index_col='Date')
-
+#
     #print(stock_data['Close'].values)
 
     close = stock_data['Close'].values
