@@ -270,6 +270,8 @@ class Agent:
 
         model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
 
+        return model
+
     def act(self, state):
         if not self.is_eval and random.random() <= self.epsilon:
             return random.randrange(self.action_size)
