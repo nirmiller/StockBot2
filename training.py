@@ -90,7 +90,7 @@ for e in range(episode_count + 1):
         if (action == 2 and agent.inventory == 0) or (action == 1 and equity - (buy * close) <= 0) or (
                 action == 1 and buy <= 0):
             print("Hold due to circumstances {}".format(action))
-            reward = -2500
+            reward = -1000
         elif action == 1 and equity - (buy * close) > 0:  # buy
             equity -= buy * close
             agent.inventory += buy
@@ -137,7 +137,7 @@ for e in range(episode_count + 1):
             print("REPLAY {}".format(agent.epsilon))
 
     if e % 10 == 0:
-        agent.model.save("CNN/model_2/model_2_1_{}".format(str(e)))
+        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_4/model_4_1_{}".format(str(e)))
 
     if e % 7 == 0:
         agent.epsilon = 0.5
