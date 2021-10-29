@@ -25,7 +25,17 @@ from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 import math
 
+from keras.models import Sequential
+from keras.models import load_model
+from keras.layers import Dense, LSTM, Dropout
+from tensorflow.keras.optimizers import Adam
+
+import numpy as np
+import random
+from collections import deque
+
 TIME_RANGE, PRICE_RANGE = 40, 40
+
 
 
 def scale_list(l, to_min, to_max):
@@ -84,7 +94,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
-    stock_data = pd.read_csv('/content/StockBot2/data/SNDL.txt', parse_dates=True, index_col='Date')
+    stock_data = pd.read_csv('data/PLUG.txt', parse_dates=True, index_col='Date')
 #
     #print(stock_data['Close'].values)
 
@@ -147,104 +157,6 @@ def fix_input(state):
     state = state.astype('float32')
     return state
 
-
-import keras
-from keras.models import Sequential
-from keras.models import load_model
-from keras.layers import Dense, LSTM, Dropout
-from tensorflow.keras.optimizers import Adam
-import tensorflow as tf
-
-
-class F_Bot:
-    def __init__(self, window_size, model_name=""):
-        self.model_name = model_name
-        self.window_size = window_size
-        self.forecast_model = self._model(self.window_size)
-
-    def _model(self, window_size):
-        forecast_model = Sequential()
-        forecast_model.add(LSTM(128, return_sequences=True, input_shape=(window_size, 5)))
-        forecast_model.add(LSTM(64, return_sequences=True))
-        forecast_model.add(LSTM(64, return_sequences=False))
-        forecast_model.add(Dense(units=1, activation='linear'))
-        forecast_model.compile(optimizer=Adam(lr=.0001), loss='mean_squared_error')
-        forecast_model.load_weights("forecast/model_pi_1_5")
-        return forecast_model
-
-    def getForecastData(self, stocks):
-        forecast = []
-        window_size = self.window_size
-        # Use F-Bot to calculate the n* forecasting values for the n* # of stocks
-        number_stocks = len(stocks)
-        for i in range(0, number_stocks):
-            stock = stocks[i]
-            df = pdr.get_data_tiingo(stock, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
-            data = df.filter(['close', 'open', 'high', 'low'])
-            data = data[30:-1]
-            dataset = data.values
-            normalizer = Normalizer()
-            scaler = RobustScaler()
-            standard = MinMaxScaler(feature_range=(0, 1))
-            # normalizer = Normalizer()
-            scaled_data = normalizer.fit_transform(dataset)
-            scaled_data = scaler.fit_transform(scaled_data)
-            scaled_data = standard.fit_transform(scaled_data)
-
-            # VOLUME DATA
-
-            v_data = df.filter(['volume'])
-            v_data = v_data[30:-1].values
-            volume_data = []
-            for i in range(len(dataset) - 1):
-                volume_data.append(v_data[i + 1] - v_data[i])
-
-            s = MinMaxScaler(feature_range=(-1, 1))
-
-            volume_data = np.array(volume_data)
-            volume_data = np.reshape(volume_data, (volume_data.shape[0], 1))
-
-            scaled_volume = s.fit_transform(volume_data)
-
-            scaled_volume = np.reshape(scaled_volume, (1, scaled_volume.shape[0]))
-
-            volume_vals = scaled_volume[0].tolist()
-
-            volume_vals = np.array(volume_vals)
-
-            # ------------------------------------------------------------#
-
-            train_data = scaled_data[0:-1, :]
-
-            x_vals = [[], [], [], [], []]
-
-            for i in range(window_size, len(train_data) - 1):
-                for j in range(0, train_data.shape[1] + 1):
-                    if j <= train_data.shape[1] - 1:
-                        x_vals[j].append(train_data[i - window_size: i, j])
-                    else:
-                        x_vals[j].append(volume_vals[i - window_size: i])
-            x_vals = np.array(x_vals)
-
-            x_vals = np.reshape(x_vals, (x_vals.shape[1], x_vals.shape[2], x_vals.shape[0]))
-            predictions = self.forecast_model.predict(x_vals)
-            predictions = np.array(predictions)
-            predictions = np.reshape(predictions, (predictions.shape[1], predictions.shape[0]))
-            # print(predictions[0])
-            forecast.append(predictions[0])
-        return forecast
-
-
-import keras
-from keras.models import Sequential
-from keras.models import load_model
-from keras.layers import Dense, LSTM, Dropout
-from tensorflow.keras.optimizers import Adam
-import tensorflow as tf
-
-import numpy as np
-import random
-from collections import deque
 
 
 class Agent:
@@ -311,3 +223,4 @@ class Agent:
             self.model.fit(state, target_f, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
+getState(getStockData('PLUG'), 1, 46, 40, 40)

@@ -245,7 +245,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.94
+        self.gamma = 0.95
         self.epsilon = 0.8
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.9988
@@ -260,17 +260,15 @@ class Agent:
     def create_model(self):
         input_shape_1 = (self.time_range, self.price_range, 3)
 
-        base_model = tf.keras.applications.resnet50.ResNet50(include_top=False, weights=None, input_shape=input_shape_1)
+        model = Sequential()
+        model.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=input_shape_1))
+        model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        model.add(Flatten())
+        model.add(Dense(128))
+        model.add(Dense(self.action_size, activation='linear'))
 
-        x = base_model.output
-        x = GlobalAveragePooling2D()(x)
-
-        predictions = Dense(self.action_size, activation='linear')(x)
-
-        model = Model(inputs=base_model.inputs, outputs=predictions)
-
-        model.compile(loss='mse', optimizer=Adam(lr=.0001), metrics=['accuracy'])
-        return model
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
 
     def act(self, state):
         if not self.is_eval and random.random() <= self.epsilon:

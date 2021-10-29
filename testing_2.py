@@ -52,7 +52,7 @@ for t in range(TIME_RANGE, l):
         agent.inventory += buy
         sell_option = 1
         print("Buy: {} Amount : {}".format(close, buy))
-    elif action == 1 and agent.inventory >= sell:  # sell
+    elif action == 1 and agent.inventory > 0:  # sell
         equity += sell * close
         change_equity = equity - initial_equity
         initial_profit = total_profit
