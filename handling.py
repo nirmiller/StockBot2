@@ -255,7 +255,7 @@ class Agent:
         else:
             self.model = self.create_model()
 
-        self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_4/model_4_1_20')
+        #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_4/model_4_1_20')
 
     def create_model(self):
         input_shape_1 = (self.time_range, self.price_range, 3)
@@ -265,7 +265,7 @@ class Agent:
         model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Flatten())
-        model.add(Dense(128))
+        model.add(Dense(256))
         model.add(Dense(self.action_size, activation='linear'))
 
         model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])

@@ -137,7 +137,7 @@ for e in range(episode_count + 1):
             print("REPLAY {}".format(agent.epsilon))
 
     if e % 10 == 0:
-        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_4/model_4_2_{}".format(str(e)))
+        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_4/model_4_1_{}".format(str(e)))
 
     if e % 7 == 0:
         agent.epsilon = 0.5
