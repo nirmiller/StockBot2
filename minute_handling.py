@@ -83,7 +83,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 
     blank_matrix = np.vstack([blank_matrix_close, blank_matrix_macd])
 
-    if 2 == 2:
+    if 1 == 2:
         # graphed on matrix
         plt.imshow(blank_matrix)
         plt.show()
