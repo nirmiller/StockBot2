@@ -83,7 +83,6 @@ def getStockData(key):
     stock_data = np.array(stock_data)
 
     stats = StockDataFrame.retype(stock_data)
-    stock_data['Symbol'] = key
 
     stock_dif = (stock_data['close'] - stock_data['open'])
     stock_dif = stock_dif.values
