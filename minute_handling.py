@@ -171,7 +171,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.95
+        self.gamma = 0.925
         self.epsilon = 0.75
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.9988
@@ -191,7 +191,7 @@ class Agent:
         model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Flatten())
-        model.add(Dense(128))
+        model.add(Dense(300))
         model.add(Dense(self.action_size, activation='linear'))
 
         model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
