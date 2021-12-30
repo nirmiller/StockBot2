@@ -151,11 +151,11 @@ def getBotPeformance(raw_data, window_size):
 
 
 def fix_input(state):
-    state = np.array(state)
-    img_rows, img_cols = TIME_RANGE, PRICE_RANGE
-    state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
-    state = state.astype('float32')
-    return state
+	state = np.array(state)
+	img_rows, img_cols = TIME_RANGE, PRICE_RANGE
+	state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
+	state = state.astype('float32')/255.0
+	return state
 
 
 
@@ -223,4 +223,4 @@ class Agent:
             self.model.fit(state, target_f, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
-getState(getStockData('PLUG'), 1, 46, 40, 40)
+#getState(getStockData('PLUG'), 1, 46, 40, 40)
