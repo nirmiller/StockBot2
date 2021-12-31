@@ -179,11 +179,13 @@ class Agent:
             self.model = load_model(model_name)
         else:
             #self.model = self.create_model()
-            self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_pre/model_3')
-            print(self.model.summary())
+            #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_pre/model_3')
+            print("hello")
 
-        #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_50')
 
+        self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_50')
+
+        print(self.model.summary())
     def create_model(self):
         input_shape_1 = (self.time_range, self.price_range, 3)
 
