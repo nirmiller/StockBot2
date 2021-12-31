@@ -94,7 +94,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
-    stock_data = pd.read_csv('StockBot2/data/PLUG.txt', parse_dates=True, index_col='Date')
+    stock_data = pd.read_csv('StockBot2/data/SNDL.txt', parse_dates=True, index_col='Date')
 #
     #print(stock_data['Close'].values)
 
@@ -224,4 +224,3 @@ class Agent:
             self.model.fit(state, target_f, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
-#getState(getStockData('PLUG'), 1, 46, 40, 40)
