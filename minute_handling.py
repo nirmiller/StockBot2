@@ -178,8 +178,8 @@ class Agent:
         if is_eval:
             self.model = load_model(model_name)
         else:
-            self.model = self.create_model()
-            #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_pre/model_3')
+            #self.model = self.create_model()
+            self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_pre/model_3')
 
         #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_50')
 
@@ -214,13 +214,12 @@ class Agent:
         for state, action, reward, next_state, done in mini_batch:
             target = reward
             state = fix_input(state)
+
             if not done:
                 target = reward + self.gamma * np.amax(self.model.predict(fix_input(next_state))[0])
 
             target_f = self.model.predict(state)
             target_f[0][action] = target
-            target_f = np.array(target_f)
-            print(target_f.shape)
 
             self.model.fit(state, target_f, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
