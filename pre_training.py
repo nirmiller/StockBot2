@@ -20,4 +20,4 @@ for i in range(TIME_RANGE, l):
     x_data.append(snap)
 
 x_data = np.array(fix_input(x_data))
-print(x_data)
+

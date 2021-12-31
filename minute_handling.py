@@ -94,7 +94,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
-    stock_data = pd.read_csv('StockBot2/data/PLUG.txt', parse_dates=True, index_col='Date')
+    stock_data = pd.read_csv('StockBot2/data/SNDL.txt', parse_dates=True, index_col='Date')
 #
     #print(stock_data['Close'].values)
 
@@ -172,14 +172,15 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.925
-        self.epsilon = 0.75
+        self.epsilon = 0.4
         self.epsilon_min = 0.001
-        self.epsilon_decay = 0.9988
+        self.epsilon_decay = 0.9989
 
         if is_eval:
             self.model = load_model(model_name)
         else:
             self.model = self.create_model()
+            self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_pre/model_3')
 
         #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_50')
 
