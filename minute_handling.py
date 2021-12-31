@@ -94,7 +94,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
-    stock_data = pd.read_csv('StockBot2/data/SNDL.txt', parse_dates=True, index_col='Date')
+    stock_data = pd.read_csv('StockBot2/data/PLUG.txt', parse_dates=True, index_col='Date')
 #
     #print(stock_data['Close'].values)
 
@@ -154,9 +154,8 @@ def fix_input(state):
 	state = np.array(state)
 	img_rows, img_cols = TIME_RANGE, PRICE_RANGE
 	state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
-	state = state.astype('float32')/255.0
+	state = state.astype('float32')
 	return state
-
 
 
 class Agent:
