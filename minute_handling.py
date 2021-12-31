@@ -154,7 +154,7 @@ def fix_input(state):
 	state = np.array(state)
 	img_rows, img_cols = TIME_RANGE, PRICE_RANGE
 	state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
-	state = state.astype('float32')
+	state = state.astype('float32')/255.0
 	return state
 
 
@@ -179,7 +179,7 @@ class Agent:
             self.model = load_model(model_name)
         else:
             self.model = self.create_model()
-            self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_pre/model_3')
+            #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_pre/model_3')
 
         #self.model = load_model('/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_50')
 
