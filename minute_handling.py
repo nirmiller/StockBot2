@@ -170,7 +170,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.92
+        self.gamma = 0.6
         self.epsilon = 0.9
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.9989
