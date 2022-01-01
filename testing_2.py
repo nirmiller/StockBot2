@@ -4,7 +4,7 @@ import os
 #from handling_2 import *
 from minute_handling import *
 
-stock_name, model_name = "AMZN", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_4_20"
+stock_name, model_name = "AMZN", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_5/model_5_1_5"
 
 agent = Agent(TIME_RANGE, PRICE_RANGE, is_eval=True, model_name=model_name)
 window_size = agent.model.layers[0].input.shape.as_list()[1]
