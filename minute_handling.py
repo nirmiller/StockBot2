@@ -179,7 +179,7 @@ class Agent:
             self.model = load_model(model_name)
         else:
             #self.model = self.create_model()
-            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_5/model_5_1_5")
+            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_5/model_5_2_10")
 
 
     def create_model(self):
@@ -193,7 +193,7 @@ class Agent:
         model.add(Dense(300))
         model.add(Dense(self.action_size, activation='linear'))
 
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
         return model
 
     def act(self, state):
