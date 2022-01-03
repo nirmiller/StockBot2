@@ -193,7 +193,7 @@ class Agent:
         model.add(Dense(300))
         model.add(Dense(self.action_size, activation='linear'))
 
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
         return model
 
     def act(self, state):
