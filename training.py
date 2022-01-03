@@ -82,12 +82,13 @@ for e in range(episode_count + 1):
         if (action == 2 and agent.inventory == 0) or (action == 1 and equity - (buy * close) <= 0) or (
                 action == 1 and buy <= 0):
             print("Hold due to circumstances {}".format(action))
-            reward = -2500
+            reward = -500
         elif action == 1 and equity - (buy * close) > 0:  # buy
             equity -= buy * close
             agent.inventory += buy
             sell_option = 1
             print("Buy: {} Amount : {}".format(close, buy))
+            reward = 200
         elif action == 2 and agent.inventory > 0:  # sell
             equity += sell * close
             change_equity = equity - initial_equity
@@ -105,6 +106,7 @@ for e in range(episode_count + 1):
             count = 0
         elif action == 0:
             print("Hold")
+            reward = 100
 
         print(f"Reward : {reward}")
         agent.total_inventory.append(agent.inventory)
