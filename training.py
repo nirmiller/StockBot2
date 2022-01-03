@@ -37,7 +37,7 @@ memory_count = 0
 
 stock_name, episode_count = "PLUG", 100
 agent = Agent(TIME_RANGE, PRICE_RANGE)
-data = getStockData(stock_name)[500:1000]
+data = getStockData(stock_name)
 close_values = data[0]
 
 l = len(close_values)
