@@ -163,23 +163,23 @@ class Agent:
         self.price_range = PRICE_RANGE
         self.time_range = TIME_RANGE
 
-        self.action_size = 2  # sit, buy, sell
+        self.action_size = 3  # hold, buy, sell
         self.memory = deque(maxlen=500_000)
         self.inventory = 0
         self.model_name = model_name
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.5
+        self.gamma = 0.75
         self.epsilon = 0.5
         self.epsilon_min = 0.001
-        self.epsilon_decay = 0.9989
+        self.epsilon_decay = 0.9998
 
         if is_eval:
             self.model = load_model(model_name)
         else:
-            #self.model = self.create_model()
-            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_5/model_5_2_10")
+            self.model = self.create_model()
+            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_5/model_5_2_10")
 
 
     def create_model(self):

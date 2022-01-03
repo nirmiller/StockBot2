@@ -37,7 +37,7 @@ memory_count = 0
 
 stock_name, episode_count = "PLUG", 100
 agent = Agent(TIME_RANGE, PRICE_RANGE)
-data = getStockData(stock_name)
+data = getStockData(stock_name)[500:1000]
 close_values = data[0]
 
 l = len(close_values)
@@ -48,7 +48,7 @@ for e in range(episode_count + 1):
     total_profit = 0
     initial_profit = 0
     agent.inventory = 0
-    batch_size = 32
+    batch_size = 16
     equity = 100_000
     initial_equity = 0
     change_equity = 0
@@ -79,12 +79,16 @@ for e in range(episode_count + 1):
         if t == TIME_RANGE:
             initial_equity = equity
 
-        if action == 0:  # buy
+        if (action == 2 and agent.inventory == 0) or (action == 1 and equity - (buy * close) <= 0) or (
+                action == 1 and buy <= 0):
+            print("Hold due to circumstances {}".format(action))
+            reward = -2500
+        elif action == 1 and equity - (buy * close) > 0:  # buy
             equity -= buy * close
             agent.inventory += buy
             sell_option = 1
             print("Buy: {} Amount : {}".format(close, buy))
-        elif action == 1 and agent.inventory > 0:  # sell
+        elif action == 2 and agent.inventory > 0:  # sell
             equity += sell * close
             change_equity = equity - initial_equity
             initial_profit = total_profit
@@ -99,6 +103,8 @@ for e in range(episode_count + 1):
             sell_option = 0
             print("Sell: {} Amount : {} | Profit: {} | Equity : {}".format(close, sell, change_equity, equity))
             count = 0
+        elif action == 0:
+            print("Hold")
 
         print(f"Reward : {reward}")
         agent.total_inventory.append(agent.inventory)
@@ -122,7 +128,7 @@ for e in range(episode_count + 1):
             print("REPLAY {}".format(agent.epsilon))
 
     if e % 5 == 0:
-        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_5/model_5_3_{}".format(str(e)))
+        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_6/model_6_1_{}".format(str(e)))
 
     if e % 5 == 0:
         agent.epsilon = 0.45
