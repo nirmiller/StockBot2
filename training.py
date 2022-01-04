@@ -88,7 +88,7 @@ for e in range(episode_count + 1):
             agent.inventory += buy
             sell_option = 1
             print("Buy: {} Amount : {}".format(close, buy))
-            reward = 200
+            reward = 500
         elif action == 2 and agent.inventory > 0:  # sell
             equity += sell * close
             change_equity = equity - initial_equity
