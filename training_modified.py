@@ -37,7 +37,7 @@ memory_count = 0
 
 stock_name, episode_count = "PLUG", 100
 agent = Agent(TIME_RANGE, PRICE_RANGE)
-data = getStockData(stock_name)
+data = getStockData(stock_name)[0:200]
 close_values = data[0]
 
 l = len(close_values)
@@ -79,7 +79,7 @@ for e in range(episode_count + 1):
         if t == TIME_RANGE:
             initial_equity = equity
 
-        if action == 1 and equity - (buy * close) > 0:  # buy
+        if action == 1:  # buy
             equity -= buy * close
             agent.inventory += buy
             sell_option = 1
@@ -124,7 +124,7 @@ for e in range(episode_count + 1):
             print("REPLAY {}".format(agent.epsilon))
 
     if e % 5 == 0:
-        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_6/model_6_3_{}".format(str(e)))
+        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_1_{}".format(str(e)))
 
     if e % 5 == 0:
         agent.epsilon = 0.45
