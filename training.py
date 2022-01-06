@@ -79,11 +79,8 @@ for e in range(episode_count + 1):
         if t == TIME_RANGE:
             initial_equity = equity
 
-        if (action == 2 and agent.inventory == 0) or (action == 1 and equity - (buy * close) <= 0) or (
-                action == 1 and buy <= 0):
-            print("Hold due to circumstances {}".format(action))
-            reward = -100
-        elif action == 1 and equity - (buy * close) > 0:  # buy
+
+        if action == 1 and equity - (buy * close) > 0:  # buy
             equity -= buy * close
             agent.inventory += buy
             sell_option = 1
