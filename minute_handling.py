@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas_datareader as pdr
-from stockstats import *
+from stockstats import StockDataFrame
 import cv2
 from PIL import Image
 
