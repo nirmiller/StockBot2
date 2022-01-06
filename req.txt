@@ -1,4 +1,5 @@
-tensorflow 
+tensorflow
+int_date==0.1.8
 stockstats
 keras 
 pandas-datareader
