@@ -178,8 +178,8 @@ class Agent:
         if is_eval:
             self.model = load_model(model_name)
         else:
-            #self.model = self.create_model()
-            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_6/model_6_2_20")
+            self.model = self.create_model()
+            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_6/model_6_2_20")
 
 
     def create_model(self):
