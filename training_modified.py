@@ -37,7 +37,7 @@ memory_count = 0
 
 stock_name, episode_count = "PLUG", 100
 agent = Agent(TIME_RANGE, PRICE_RANGE)
-data = getStockData(stock_name)[0:50]
+data = getStockData(stock_name)[0:100]
 close_values = data[0]
 
 l = len(close_values)
@@ -74,7 +74,7 @@ for e in range(episode_count + 1):
         sell = agent.inventory
         # print("Close = {}  :   Open = {}  :  Volume = {}".format(close, data[1][t], data[2][t]))
 
-        print("Close = {} Money = {},  Inventory = {}".format(close, profit_data[0][-1], agent.total_inventory[-1]))
+        print("t = {}, Close = {} Money = {},  Inventory = {}".format(t, close, profit_data[0][-1], agent.total_inventory[-1]))
 
         if t == TIME_RANGE:
             initial_equity = equity
