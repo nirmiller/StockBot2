@@ -171,9 +171,9 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.55
-        self.epsilon = 0.75
+        self.epsilon = 0.9
         self.epsilon_min = 0
-        self.epsilon_decay = 0.998
+        self.epsilon_decay = 0.997
 
         if is_eval:
             self.model = load_model(model_name)
