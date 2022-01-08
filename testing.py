@@ -3,7 +3,7 @@ from keras.models import load_model
 import os
 from minute_handling import *
 
-stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_6/model_6_1_10"
+stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_2_20"
 
 agent = Agent(TIME_RANGE, PRICE_RANGE, is_eval=True, model_name=model_name)
 window_size = agent.model.layers[0].input.shape.as_list()[1]
@@ -49,13 +49,11 @@ for t in range(TIME_RANGE, l):
     if (action == 2 and agent.inventory == 0) or (action == 1 and equity - (buy * close) <= 0) or (
             action == 1 and buy <= 0):
         print("Hold due to circumstances {}".format(action))
-        reward = -2500
     elif action == 1 and equity - (buy * close) > 0:  # buy
         equity -= buy * close
         agent.inventory += buy
         sell_option = 1
         print("Buy: {} Amount : {}".format(close, buy))
-        reward = 1000
     elif action == 2 and agent.inventory > 0:  # sell
         equity += sell * close
         change_equity = equity - initial_equity
