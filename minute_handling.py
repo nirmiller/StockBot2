@@ -35,6 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 40, 40
+DATA_POINTS = 100
 
 
 
@@ -120,7 +121,7 @@ def getStockData(key):
 
     closing_values = list(np.array(close))
 
-    return_data = [closing_values[0:200], macd[0:200], macds[0:200]]
+    return_data = [closing_values[0:DATA_POINTS], macd[0:DATA_POINTS], macds[0:DATA_POINTS]]
 
     return return_data
 
