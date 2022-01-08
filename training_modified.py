@@ -41,6 +41,7 @@ data = getStockData(stock_name)[0:100]
 close_values = data[0]
 
 l = len(close_values)
+print(l)
 agent.total_inventory.append(0)
 
 for e in range(episode_count + 1):
