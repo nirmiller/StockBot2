@@ -35,7 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 40, 40
-DATA_POINTS = 100
+DATA_POINTS = 150
 
 
 
@@ -174,7 +174,7 @@ class Agent:
         self.gamma = 0.575
         self.epsilon = 0.9
         self.epsilon_min = 0
-        self.epsilon_decay = 0.997
+        self.epsilon_decay = 0.9
 
         if is_eval:
             self.model = load_model(model_name)
