@@ -176,7 +176,7 @@ class Agent:
         self.gamma = 0.98
         self.epsilon = 1.00
         self.epsilon_min = 0
-        self.epsilon_decay = 0.9
+        self.epsilon_decay = 0.995
 
         if is_eval:
             self.model = load_model(model_name)
