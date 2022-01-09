@@ -71,7 +71,7 @@ for e in range(episode_count + 1):
         reward = 0
         close = data[0][t]
 
-        buy = 1000
+        buy = math.floor(equity / close)
         sell = agent.inventory
         # print("Close = {}  :   Open = {}  :  Volume = {}".format(close, data[1][t], data[2][t]))
 
