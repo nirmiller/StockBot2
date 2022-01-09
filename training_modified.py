@@ -124,8 +124,8 @@ for e in range(episode_count + 1):
             agent.expReplay(batch_size)
             print("REPLAY {}".format(agent.epsilon))
 
-    if e % 10 == 0:
+    if e % 20 == 0:
         agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_6_{}".format(str(e)))
 
     if e % 10 == 0:
-        agent.epsilon = 0.4
+        agent.epsilon = 0.6
