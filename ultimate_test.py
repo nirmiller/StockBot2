@@ -5,8 +5,8 @@ from handling_2 import *
 
 equity_data = []
 
-for i in range(1, 5 + 1):
-    stock_name, model_name = "AAPL", f"/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_3/model_3_3_{i}0"
+for i in range(0, 12):
+    stock_name, model_name = "AAPL", f"/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_4_{i*5}0"
     model = load_model(model_name)
     window_size = model.layers[0].input.shape.as_list()[1]
 
@@ -18,7 +18,7 @@ for i in range(1, 5 + 1):
     total_profit = 0
     initial_profit = 0
     agent.inventory = 0
-    batch_size = 32
+    batch_size = 16
     equity = 100_000
     initial_equity = 0
     change_equity = 0
@@ -49,12 +49,15 @@ for i in range(1, 5 + 1):
         if t == TIME_RANGE:
             initial_equity = equity
 
-        if action == 0 and equity - (buy * close) > 0:  # buy
+        if (action == 2 and agent.inventory == 0) or (action == 1 and equity - (buy * close) <= 0) or (
+                action == 1 and buy <= 0):
+            print("Hold due to circumstances {}".format(action))
+        elif action == 1 and equity - (buy * close) > 0:  # buy
             equity -= buy * close
             agent.inventory += buy
             sell_option = 1
             print("Buy: {} Amount : {}".format(close, buy))
-        elif action == 1 and agent.inventory >= sell:  # sell
+        elif action == 2 and agent.inventory > 0:  # sell
             equity += sell * close
             change_equity = equity - initial_equity
             initial_profit = total_profit
