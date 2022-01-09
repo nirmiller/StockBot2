@@ -35,7 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 40, 40
-DATA_POINTS = 200
+DATA_POINTS = 100
 
 
 
@@ -174,15 +174,15 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.999
-        self.epsilon = 1.00
+        self.epsilon = .5
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
 
         if is_eval:
             self.model = load_model(model_name)
         else:
-            self.model = self.create_model()
-            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_6/model_6_2_20")
+            #self.model = self.create_model()
+            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_7_5")
 
 
     def create_model(self):
