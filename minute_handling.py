@@ -121,7 +121,9 @@ def getStockData(key):
 
     closing_values = list(np.array(close))
 
-    return_data = [closing_values[0:DATA_POINTS], macd[0:DATA_POINTS], macds[0:DATA_POINTS]]
+    #return_data = [closing_values[0:DATA_POINTS], macd[0:DATA_POINTS], macds[0:DATA_POINTS]]
+    return_data = [closing_values, macd, macds]
+
 
     return return_data
 
