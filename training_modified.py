@@ -49,7 +49,7 @@ for e in range(episode_count + 1):
     total_profit = 0
     initial_profit = 0
     agent.inventory = 0
-    batch_size = 16
+    batch_size = 5
     equity = 100_000
     initial_equity = 0
     change_equity = 0
