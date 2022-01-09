@@ -3,7 +3,7 @@ from keras.models import load_model
 import os
 from minute_handling import *
 
-stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_3_30"
+stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_4_60"
 
 agent = Agent(TIME_RANGE, PRICE_RANGE, is_eval=True, model_name=model_name)
 window_size = agent.model.layers[0].input.shape.as_list()[1]
