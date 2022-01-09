@@ -35,7 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 40, 40
-DATA_POINTS = 100
+DATA_POINTS = 200
 
 
 
@@ -173,16 +173,16 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.999
-        self.epsilon = .5
+        self.gamma = 0.96
+        self.epsilon = .75
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
 
         if is_eval:
             self.model = load_model(model_name)
         else:
-            #self.model = self.create_model()
-            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_7_5")
+            self.model = self.create_model()
+            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_7_5")
 
 
     def create_model(self):
@@ -193,10 +193,11 @@ class Agent:
         model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Flatten())
-        model.add(Dense(120))
+        model.add(LSTM(30,  return_sequences= False, input_shape = (model.input_shape, 1)))
+        model.add(Dense(120, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
 
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
         return model
 
     def act(self, state):
