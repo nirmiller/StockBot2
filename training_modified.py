@@ -49,7 +49,7 @@ for e in range(episode_count + 1):
     total_profit = 0
     initial_profit = 0
     agent.inventory = 0
-    batch_size = 16
+    batch_size = 32
     equity = 100_000
     initial_equity = 0
     change_equity = 0
@@ -71,7 +71,7 @@ for e in range(episode_count + 1):
         reward = 0
         close = data[0][t]
 
-        buy = math.floor(equity / close)
+        buy = 1000
         sell = agent.inventory
         # print("Close = {}  :   Open = {}  :  Volume = {}".format(close, data[1][t], data[2][t]))
 
@@ -124,8 +124,8 @@ for e in range(episode_count + 1):
             agent.expReplay(batch_size)
             print("REPLAY {}".format(agent.epsilon))
 
-    if e % 20 == 0:
-        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_6_{}".format(str(e)))
+    if e % 5 == 0:
+        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_7_{}".format(str(e)))
 
     if e % 10 == 0:
         agent.epsilon = 0.6
