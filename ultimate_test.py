@@ -1,7 +1,7 @@
 import keras
 from keras.models import load_model
 import os
-from handling_2 import *
+from minute_handling import *
 
 equity_data = []
 
