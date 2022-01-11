@@ -186,7 +186,6 @@ class Agent:
         input_shape_1 = (self.time_range, self.price_range, 3)
 
         inputs = keras.Input(shape=input_shape_1)
-
         conv1 = Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=input_shape_1)(inputs)
         conv2 = Conv2D(64, kernel_size=(4, 4), activation='relu')(conv1)
         conv3 = Conv2D(64, kernel_size=(3, 3), activation='relu')(conv2)
