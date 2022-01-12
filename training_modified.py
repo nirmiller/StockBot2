@@ -127,5 +127,5 @@ for e in range(episode_count + 1):
     if e % 5 == 0:
         agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_1_{}".format(str(e)))
 
-    if e % 10 == 0:
+    if e % 5 == 0:
         agent.epsilon = 0.6
