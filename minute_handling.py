@@ -193,7 +193,6 @@ class Agent:
         model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Flatten())
-        model.add(LSTM(30,  return_sequences= False, input_shape=0))
         model.add(Dense(150, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
 
