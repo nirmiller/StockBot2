@@ -26,7 +26,7 @@ from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 import math
 
-TIME_RANGE, PRICE_RANGE = 40, 40
+TIME_RANGE, PRICE_RANGE = 30, 30
 
 import sys
 import math
@@ -49,7 +49,7 @@ for e in range(episode_count + 1):
     total_profit = 0
     initial_profit = 0
     agent.inventory = 0
-    batch_size = 32
+    batch_size = 16
     equity = 100_000
     initial_equity = 0
     change_equity = 0
@@ -125,7 +125,7 @@ for e in range(episode_count + 1):
             print("REPLAY {}".format(agent.epsilon))
 
     if e % 5 == 0:
-        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_8_{}".format(str(e)))
+        agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_1_{}".format(str(e)))
 
     if e % 10 == 0:
         agent.epsilon = 0.6

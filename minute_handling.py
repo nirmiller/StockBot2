@@ -35,7 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 40, 40
-DATA_POINTS = 200
+DATA_POINTS = 300
 
 
 
@@ -174,7 +174,7 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.96
-        self.epsilon = .75
+        self.epsilon = .9
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
 
