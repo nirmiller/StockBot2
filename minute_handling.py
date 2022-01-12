@@ -38,6 +38,7 @@ TIME_RANGE, PRICE_RANGE = 40, 40
 DATA_POINTS = 200
 
 
+
 def scale_list(l, to_min, to_max):
     def scale_number(unscaled, to_min, to_max, from_min, from_max):
         return (to_max - to_min) * (unscaled - from_min) / (from_max - from_min) + to_min
@@ -92,11 +93,11 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 
 
 def getStockData(key):
-    # stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
+    #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
     stock_data = pd.read_csv('StockBot2/data/PLUG.txt', parse_dates=True, index_col='Date')
-    #
-    # print(stock_data['Close'].values)
+#
+    #print(stock_data['Close'].values)
 
     close = stock_data['Close'].values
     open = stock_data['Open'].values
@@ -121,7 +122,8 @@ def getStockData(key):
     closing_values = list(np.array(close))
 
     return_data = [closing_values[0:DATA_POINTS], macd[0:DATA_POINTS], macds[0:DATA_POINTS]]
-    # return_data = [closing_values, macd, macds]
+    #return_data = [closing_values, macd, macds]
+
 
     return return_data
 
@@ -152,11 +154,11 @@ def getBotPeformance(raw_data, window_size):
 
 
 def fix_input(state):
-    state = np.array(state)
-    img_rows, img_cols = TIME_RANGE, PRICE_RANGE
-    state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
-    state = state.astype('float32') / 255.0
-    return state
+	state = np.array(state)
+	img_rows, img_cols = TIME_RANGE, PRICE_RANGE
+	state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
+	state = state.astype('float32')/255.0
+	return state
 
 
 class Agent:
@@ -180,24 +182,20 @@ class Agent:
             self.model = load_model(model_name)
         else:
             self.model = self.create_model()
-            # self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_7_5")
+            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_7_5")
+
 
     def create_model(self):
         input_shape_1 = (self.time_range, self.price_range, 3)
 
-        inputs = keras.Input(shape=input_shape_1)
-        conv1 = Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=input_shape_1)(inputs)
-        conv2 = Conv2D(64, kernel_size=(4, 4), activation='relu')(conv1)
-        conv3 = Conv2D(64, kernel_size=(3, 3), activation='relu')(conv2)
-
-        flatten1 = Flatten()(conv3)
-
-        #lstm1 = LSTM(30, return_sequences=False, input_shape=0)(flatten1)
-
-        dense1 = Dense(120, activation='relu')(flatten1)
-        outputs = Dense(self.action_size, activation='linear')(dense1)
-
-        model = keras.Model(input=inputs, output=outputs)
+        model = Sequential()
+        model.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=input_shape_1))
+        model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        model.add(Flatten())
+        model.add(LSTM(30,  return_sequences= False, input_shape=0))
+        model.add(Dense(150, activation='relu'))
+        model.add(Dense(self.action_size, activation='linear'))
 
         model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
         return model
