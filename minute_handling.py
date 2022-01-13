@@ -173,7 +173,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.9
+        self.gamma = 0.75
         self.epsilon = .9
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
@@ -196,7 +196,7 @@ class Agent:
         model.add(Dense(150, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
 
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
         return model
 
     def act(self, state):
