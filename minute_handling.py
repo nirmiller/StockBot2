@@ -174,15 +174,15 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.9
-        self.epsilon = .5
+        self.epsilon = .9
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
 
         if is_eval:
             self.model = load_model(model_name)
         else:
-            #self.model = self.create_model()
-            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_2_25")
+            self.model = self.create_model()
+            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_2_25")
 
 
     def create_model(self):
