@@ -233,6 +233,9 @@ class Agent:
 
             window_state.append(state)
             window_target.append(target_f)
-        self.model.fit(window_state, window_target, epochs=1, verbose=0)
+        print(np.array(window_state).shape)
+        print(np.array(window_target).shape)
+
+        self.model.fit(np.array(window_state), np.array(window_target), epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
