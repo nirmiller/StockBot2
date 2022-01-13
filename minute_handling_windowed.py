@@ -196,7 +196,7 @@ class Agent:
         covnet.add(GlobalMaxPool2D())
 
         x = TimeDistributed(covnet)(inputs)
-        x = LSTM(layers=50, return_sequences=False)(x)
+        x = LSTM(20, return_sequences=False)(x)
         x = Dense(150, activation='relu')(x)
         output = Dense(self.action_size, activation='linear')(x)
 
