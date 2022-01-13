@@ -186,7 +186,7 @@ class Agent:
 
 
     def create_model(self):
-        inputs = tf.keras.Input(shape=(20, TIME_RANGE, PRICE_RANGE, 3))
+        inputs = tf.keras.Input(shape=(16, TIME_RANGE, PRICE_RANGE, 3))
         input_shape_1 = (TIME_RANGE, PRICE_RANGE, 3)
 
         covnet = Sequential()
