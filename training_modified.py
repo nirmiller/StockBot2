@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 plt.style.use('fivethirtyeight')
-from minute_handling import *
+from minute_handling_windowed import *
 
 import time
 import datetime
