@@ -14,7 +14,7 @@ from PIL import Image
 
 import keras
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Flatten, GlobalAveragePooling2D
+from keras.layers import Dense, Dropout, Flatten, GlobalAveragePooling2D, GlobalMaxPool2D,TimeDistributed
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 from keras.callbacks import EarlyStopping
@@ -186,17 +186,23 @@ class Agent:
 
 
     def create_model(self):
-        input_shape_1 = (self.time_range, self.price_range, 3)
+        inputs = tf.keras.Input(shape=(20, TIME_RANGE, PRICE_RANGE, 3))
+        input_shape_1 = (TIME_RANGE, PRICE_RANGE, 3)
 
-        model = Sequential()
-        model.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=input_shape_1))
-        model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
-        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-        model.add(Flatten())
-        model.add(Dense(150, activation='relu'))
-        model.add(Dense(self.action_size, activation='linear'))
+        covnet = Sequential()
+        covnet.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=input_shape_1))
+        covnet.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
+        covnet.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        covnet.add(GlobalMaxPool2D())
 
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
+        x = TimeDistributed(covnet)(inputs)
+        x = LSTM(layers=50, return_sequences=False)(x)
+        x = Dense(150, activation='relu')(x)
+        output = Dense(1, activation='linear')(x)
+
+        model = Model(inputs=inputs, outputs=output)
+        model.summary()
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
         return model
 
     def act(self, state):
@@ -208,6 +214,9 @@ class Agent:
 
     def expReplay(self, batch_size):
         mini_batch = []
+        window_state = []
+        window_target = []
+        window = batch_size
         l = len(self.memory)
         for i in range(l - batch_size + 1, l):
             mini_batch.append(self.memory[i])
@@ -223,6 +232,8 @@ class Agent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
 
-            self.model.fit(state, target_f, epochs=1, verbose=0)
+            window_state.append(state)
+            window_target.append(target_f)
+        self.model.fit(window_state, window_target, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
