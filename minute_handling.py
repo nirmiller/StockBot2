@@ -35,7 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 30, 30
-DATA_POINTS = 400
+DATA_POINTS = 1000
 
 
 
@@ -95,7 +95,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
-    stock_data = pd.read_csv('StockBot2/data/AMZN.txt', parse_dates=True, index_col='Date')
+    stock_data = pd.read_csv('StockBot2/data/SPCE.txt', parse_dates=True, index_col='Date')
 #
     #print(stock_data['Close'].values)
 
