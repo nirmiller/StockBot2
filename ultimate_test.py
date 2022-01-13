@@ -5,8 +5,8 @@ from minute_handling import *
 
 equity_data = []
 
-for i in range(0, 12):
-    stock_name, model_name = "AAPL", f"/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_7/model_7_4_{i*5}"
+for i in range(0, 15):
+    stock_name, model_name = "AAPL", f"/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_3_{i*5}"
     model = load_model(model_name)
     window_size = model.layers[0].input.shape.as_list()[1]
 
