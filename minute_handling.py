@@ -35,7 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 30, 30
-DATA_POINTS = 1000
+DATA_POINTS = 400
 
 
 
