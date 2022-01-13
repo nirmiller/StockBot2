@@ -26,7 +26,7 @@ from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 import math
 
-TIME_RANGE, PRICE_RANGE = 30, 30
+TIME_RANGE, PRICE_RANGE = 20, 20
 
 import sys
 import math
