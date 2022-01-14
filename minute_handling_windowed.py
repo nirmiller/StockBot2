@@ -14,7 +14,7 @@ from PIL import Image
 
 import keras
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Flatten, GlobalAveragePooling2D, GlobalMaxPool2D,TimeDistributed
+from keras.layers import Dense, Dropout, Flatten, GlobalAveragePooling2D, GlobalMaxPool2D, TimeDistributed
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 from keras.callbacks import EarlyStopping
@@ -35,8 +35,8 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 60, 60
+WINDOW = 60
 DATA_POINTS = 500
-
 
 
 def scale_list(l, to_min, to_max):
@@ -50,8 +50,6 @@ def scale_list(l, to_min, to_max):
 
 
 def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
-
-
     closing_values = data[0]
     macd = data[1]
     macds = data[2]
@@ -60,10 +58,11 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
 
     window = []
 
-    for i in range(t-TIME_RANGE, t):
+    for i in range(t - TIME_RANGE, t):
         graph_closing_values = list(np.round(scale_list(closing_values[t - TIME_RANGE:t], 0, half_scale_size - 1), 0))
         macd_data_together = list(
-            np.round(scale_list(list(macd[t - TIME_RANGE:t]) + list(macds[t - TIME_RANGE:t]), 0, half_scale_size - 1), 0))
+            np.round(scale_list(list(macd[t - TIME_RANGE:t]) + list(macds[t - TIME_RANGE:t]), 0, half_scale_size - 1),
+                     0))
         graph_macd = macd_data_together[0:PRICE_RANGE]
         graph_macds = macd_data_together[PRICE_RANGE:]
 
@@ -92,17 +91,16 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
     window = np.array(window)
     print(window.shape)
     window = np.reshape(window, (1, 60, 60, 60, 3))
-    print(window.shape)
 
     return window
 
 
 def getStockData(key):
-    #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
+    # stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
     stock_data = pd.read_csv(f'StockBot2/data/{key}.txt', parse_dates=True, index_col='Date')
-#
-    #print(stock_data['Close'].values)
+    #
+    # print(stock_data['Close'].values)
 
     close = stock_data['Close'].values
     open = stock_data['Open'].values
@@ -127,8 +125,7 @@ def getStockData(key):
     closing_values = list(np.array(close))
 
     return_data = [closing_values[0:DATA_POINTS], macd[0:DATA_POINTS], macds[0:DATA_POINTS]]
-    #return_data = [closing_values, macd, macds]
-
+    # return_data = [closing_values, macd, macds]
 
     return return_data
 
@@ -159,11 +156,11 @@ def getBotPeformance(raw_data, window_size):
 
 
 def fix_input(state):
-	state = np.array(state)
-	img_rows, img_cols = TIME_RANGE, PRICE_RANGE
-	state = np.reshape(state, (state.shape[0], img_rows, img_cols, 3))
-	state = state.astype('float32')/255.0
-	return state
+    state = np.array(state)
+    window, img_rows, img_cols = WINDOW, TIME_RANGE, PRICE_RANGE
+    state = np.reshape(state, (state.shape[0], window, img_rows, img_cols, 3))
+    state = state.astype('float32') / 255.0
+    return state
 
 
 class Agent:
@@ -187,8 +184,7 @@ class Agent:
             self.model = load_model(model_name)
         else:
             self.model = self.create_model()
-            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_2_25")
-
+            # self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_2_25")
 
     def create_model(self):
         inputs = tf.keras.Input(shape=(60, TIME_RANGE, PRICE_RANGE, 3))
