@@ -91,6 +91,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
         window.append([blank_matrix])
     window = np.array(window)
     print(window.shape)
+    window = np.reshape(window, (1, 60, 60, 60, 3))
     return window
 
 
