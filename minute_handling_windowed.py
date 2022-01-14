@@ -90,7 +90,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
         blank_matrix = np.vstack([blank_matrix_close, blank_matrix_macd])
         window.append([blank_matrix])
     window = np.array(window)
-    window = np.reshape(window, (1, window.shape[0], window.shape[1], window.shape[2]))
+    print(window.shape)
     return window
 
 
@@ -188,7 +188,7 @@ class Agent:
 
 
     def create_model(self):
-        inputs = tf.keras.Input(shape=(1, TIME_RANGE, PRICE_RANGE, 3))
+        inputs = tf.keras.Input(shape=(60, TIME_RANGE, PRICE_RANGE, 3))
         input_shape_1 = (TIME_RANGE, PRICE_RANGE, 3)
 
         covnet = Sequential()
