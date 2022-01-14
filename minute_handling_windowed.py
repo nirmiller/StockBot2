@@ -201,7 +201,7 @@ class Agent:
         output = Dense(self.action_size, activation='linear')(x)
 
         model = Model(inputs=inputs, outputs=output)
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
         return model
 
     def act(self, state):
