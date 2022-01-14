@@ -89,8 +89,7 @@ def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
         blank_matrix = np.vstack([blank_matrix_close, blank_matrix_macd])
         window.append([blank_matrix])
     window = np.array(window)
-    print(window.shape)
-    window = np.reshape(window, (1, 60, 60, 60, 3))
+    window = np.reshape(window, (1, WINDOW, TIME_RANGE, PRICE_RANGE, 3))
 
     return window
 
@@ -176,7 +175,7 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.9
-        self.epsilon = .5
+        self.epsilon = .9
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
 
