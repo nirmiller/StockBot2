@@ -197,7 +197,6 @@ class Agent:
 
         x = TimeDistributed(covnet)(inputs)
         x = LSTM(50, return_sequences=False)(x)
-        x = Dense(150, activation='relu')(x)
         output = Dense(self.action_size, activation='linear')(x)
 
         model = Model(inputs=inputs, outputs=output)
