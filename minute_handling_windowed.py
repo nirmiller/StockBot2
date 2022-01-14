@@ -34,8 +34,8 @@ import numpy as np
 import random
 from collections import deque
 
-TIME_RANGE, PRICE_RANGE = 20, 20
-DATA_POINTS = 300
+TIME_RANGE, PRICE_RANGE = 60, 60
+DATA_POINTS = 500
 
 
 
@@ -50,52 +50,53 @@ def scale_list(l, to_min, to_max):
 
 
 def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
+
+
     closing_values = data[0]
     macd = data[1]
     macds = data[2]
     # print(closing_values)
     half_scale_size = int(PRICE_RANGE / 2)
 
-    graph_closing_values = list(np.round(scale_list(closing_values[t - TIME_RANGE:t], 0, half_scale_size - 1), 0))
-    macd_data_together = list(
-        np.round(scale_list(list(macd[t - TIME_RANGE:t]) + list(macds[t - TIME_RANGE:t]), 0, half_scale_size - 1), 0))
-    graph_macd = macd_data_together[0:PRICE_RANGE]
-    graph_macds = macd_data_together[PRICE_RANGE:]
+    window = []
 
-    blank_matrix_macd = np.zeros((half_scale_size, TIME_RANGE, 3), dtype=np.uint8)
-    x_ind = 0
-    for s, d in zip(graph_macds, graph_macd):
-        blank_matrix_macd[int(s), x_ind] = (0, 0, 255)
-        blank_matrix_macd[int(d), x_ind] = (255, 175, 0)
-        x_ind += 1
-    blank_matrix_macd = blank_matrix_macd[::-1]
+    for i in range(t-TIME_RANGE, t):
+        graph_closing_values = list(np.round(scale_list(closing_values[t - TIME_RANGE:t], 0, half_scale_size - 1), 0))
+        macd_data_together = list(
+            np.round(scale_list(list(macd[t - TIME_RANGE:t]) + list(macds[t - TIME_RANGE:t]), 0, half_scale_size - 1), 0))
+        graph_macd = macd_data_together[0:PRICE_RANGE]
+        graph_macds = macd_data_together[PRICE_RANGE:]
 
-    blank_matrix_close = np.zeros((half_scale_size, TIME_RANGE, 3), dtype=np.uint8)
-    x_ind = 0
-    if sell_option == 1:
-        close_color = (0, 255, 0)  # GREEN
-    else:
-        close_color = (255, 0, 0)  # RED
+        blank_matrix_macd = np.zeros((half_scale_size, TIME_RANGE, 3), dtype=np.uint8)
+        x_ind = 0
+        for s, d in zip(graph_macds, graph_macd):
+            blank_matrix_macd[int(s), x_ind] = (0, 0, 255)
+            blank_matrix_macd[int(d), x_ind] = (255, 175, 0)
+            x_ind += 1
+        blank_matrix_macd = blank_matrix_macd[::-1]
 
-    for v in graph_closing_values:
-        blank_matrix_close[int(v), x_ind] = close_color
-        x_ind += 1
-    blank_matrix_close = blank_matrix_close[::-1]
+        blank_matrix_close = np.zeros((half_scale_size, TIME_RANGE, 3), dtype=np.uint8)
+        x_ind = 0
+        if sell_option == 1:
+            close_color = (0, 255, 0)  # GREEN
+        else:
+            close_color = (255, 0, 0)  # RED
 
-    blank_matrix = np.vstack([blank_matrix_close, blank_matrix_macd])
+        for v in graph_closing_values:
+            blank_matrix_close[int(v), x_ind] = close_color
+            x_ind += 1
+        blank_matrix_close = blank_matrix_close[::-1]
 
-    if 1 == 2:
-        # graphed on matrix
-        plt.imshow(blank_matrix)
-        plt.show()
-
-    return [blank_matrix]
+        blank_matrix = np.vstack([blank_matrix_close, blank_matrix_macd])
+        window.append(blank_matrix)
+    print(np.array(window).shape)
+    return np.array(window)
 
 
 def getStockData(key):
     #stock_data = pdr.get_data_tiingo(key, start='8-14-2020', api_key='9d4f4dacda5024f00eb8056b19009f32e58b38e5')
 
-    stock_data = pd.read_csv('StockBot2/data/AMZN.txt', parse_dates=True, index_col='Date')
+    stock_data = pd.read_csv(f'StockBot2/data/{key}.txt', parse_dates=True, index_col='Date')
 #
     #print(stock_data['Close'].values)
 
@@ -231,11 +232,6 @@ class Agent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
 
-            window_state.append(state)
-            window_target.append(target_f)
-        print(np.array(window_state).shape)
-        print(np.array(window_target).shape)
-
-        self.model.fit(np.array(window_state), np.array(window_target), epochs=1, verbose=0)
+            self.model.fit(state, target_f, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
