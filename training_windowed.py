@@ -51,7 +51,7 @@ for s in stocks:
         total_profit = 0
         initial_profit = 0
         agent.inventory = 0
-        batch_size = 8
+        batch_size = 16
         equity = 100_000
         initial_equity = 0
         change_equity = 0
