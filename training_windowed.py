@@ -127,7 +127,7 @@ for s in stocks:
                 print("REPLAY {}".format(agent.epsilon))
 
         if e % 5 == 0:
-            agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_1/model_1_1_{}_{}".format(str(e), s))
+            agent.model.save("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_w/model_w_1_{}_{}".format(str(e), s))
 
         if e % 5 == 0:
             agent.epsilon = 0.6
