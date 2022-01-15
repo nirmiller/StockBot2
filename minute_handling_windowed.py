@@ -34,8 +34,8 @@ import numpy as np
 import random
 from collections import deque
 
-TIME_RANGE, PRICE_RANGE = 30, 30
-WINDOW = 30
+TIME_RANGE, PRICE_RANGE = 32, 32
+WINDOW = 32
 DATA_POINTS = 300
 
 
@@ -196,8 +196,8 @@ class Agent:
         covnet.add(GlobalMaxPool2D())
 
         x = TimeDistributed(covnet)(inputs)
-        x = LSTM(50, return_sequences=False, activation='relu')(x)
-        x = Dense(50, activation='relu')(x)
+        x = LSTM(WINDOW, return_sequences=False, activation='relu')(x)
+        x = Dense(64, activation='relu')(x)
         output = Dense(self.action_size, activation='linear')(x)
 
         model = Model(inputs=inputs, outputs=output)
