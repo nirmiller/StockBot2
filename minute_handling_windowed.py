@@ -34,9 +34,9 @@ import numpy as np
 import random
 from collections import deque
 
-TIME_RANGE, PRICE_RANGE = 60, 60
-WINDOW = 60
-DATA_POINTS = 500
+TIME_RANGE, PRICE_RANGE = 30, 30
+WINDOW = 30
+DATA_POINTS = 300
 
 
 def scale_list(l, to_min, to_max):
@@ -175,9 +175,9 @@ class Agent:
         self.total_inventory = []
 
         self.gamma = 0.96
-        self.epsilon = .9
+        self.epsilon = 1
         self.epsilon_min = 0
-        self.epsilon_decay = 0.995
+        self.epsilon_decay = 0.996
 
         if is_eval:
             self.model = load_model(model_name)
