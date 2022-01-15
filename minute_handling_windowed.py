@@ -186,7 +186,7 @@ class Agent:
             # self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_2_25")
 
     def create_model(self):
-        inputs = tf.keras.Input(shape=(60, TIME_RANGE, PRICE_RANGE, 3))
+        inputs = tf.keras.Input(shape=(WINDOW, TIME_RANGE, PRICE_RANGE, 3))
         input_shape_1 = (TIME_RANGE, PRICE_RANGE, 3)
 
         covnet = Sequential()
