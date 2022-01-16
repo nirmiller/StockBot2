@@ -182,8 +182,8 @@ class Agent:
         if is_eval:
             self.model = load_model(model_name)
         else:
-            self.model = self.create_model()
-            # self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_8/model_8_2_25")
+            #self.model = self.create_model()
+            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_w/model_1_10_PLUG")
 
     def create_model(self):
         inputs = tf.keras.Input(shape=(WINDOW, TIME_RANGE, PRICE_RANGE, 3))
