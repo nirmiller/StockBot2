@@ -34,9 +34,9 @@ import numpy as np
 import random
 from collections import deque
 
-TIME_RANGE, PRICE_RANGE = 32, 32
-WINDOW = 32
-DATA_POINTS = 300
+TIME_RANGE, PRICE_RANGE = 50, 50
+WINDOW = 30
+DATA_POINTS = 500
 
 
 def scale_list(l, to_min, to_max):
@@ -174,7 +174,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.98
+        self.gamma = 0.7
         self.epsilon = 1
         self.epsilon_min = 0
         self.epsilon_decay = 0.996
@@ -182,8 +182,8 @@ class Agent:
         if is_eval:
             self.model = load_model(model_name)
         else:
-            #self.model = self.create_model()
-            self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_w/model_w_1_10_PLUG")
+            self.model = self.create_model()
+            #self.model = load_model("/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_w/model_w_1_10_PLUG")
 
     def create_model(self):
         inputs = tf.keras.Input(shape=(WINDOW, TIME_RANGE, PRICE_RANGE, 3))
