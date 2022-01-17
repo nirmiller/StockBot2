@@ -33,7 +33,7 @@ import math
 np.seterr(divide='ignore', invalid='ignore')
 
 memory_count = 0
-stocks = ['AMZN', 'SPCE', 'SNDL']
+stocks = ['PLUG', 'AMZN', 'SPCE', 'SNDL']
 stock_name, episode_count = "PLUG", 25
 agent = Agent(TIME_RANGE, PRICE_RANGE)
 
