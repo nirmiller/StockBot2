@@ -34,8 +34,8 @@ import numpy as np
 import random
 from collections import deque
 
-TIME_RANGE, PRICE_RANGE = 32, 32
-WINDOW = 32
+TIME_RANGE, PRICE_RANGE = 50, 50
+WINDOW = 30
 DATA_POINTS = 300
 
 
@@ -174,7 +174,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.96
+        self.gamma = 0.98
         self.epsilon = 1
         self.epsilon_min = 0
         self.epsilon_decay = 0.996
