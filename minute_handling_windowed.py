@@ -174,7 +174,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.7
+        self.gamma = 0.75
         self.epsilon = 1
         self.epsilon_min = 0
         self.epsilon_decay = 0.996
@@ -198,10 +198,10 @@ class Agent:
         x = TimeDistributed(covnet)(inputs)
         x = LSTM(WINDOW, return_sequences=False, activation='relu')(x)
         x = Dense(150, activation='relu')(x)
-        output = Dense(self.action_size, activation='linear')(x)
+        output = Dense(self.action_size, activation='relu')(x)
 
         model = Model(inputs=inputs, outputs=output)
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.001, clipvalue=.5), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
         return model
 
     def act(self, state):
