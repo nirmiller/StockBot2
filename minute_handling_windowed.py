@@ -35,8 +35,8 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 40, 40
-WINDOW = 40
-DATA_POINTS = 500
+WINDOW = 20
+DATA_POINTS = 300
 
 
 def scale_list(l, to_min, to_max):
@@ -200,7 +200,7 @@ class Agent:
         output = Dense(self.action_size, activation='relu')(x)
 
         model = Model(inputs=inputs, outputs=output)
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.001), metrics=['accuracy'])
         return model
 
     def act(self, state):
