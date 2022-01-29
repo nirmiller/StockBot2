@@ -48,7 +48,7 @@ def scale_list(l, to_min, to_max):
     else:
         return [scale_number(i, to_min, to_max, min(l), max(l)) for i in l]
 
-
+#
 def getState(data, sell_option, t, TIME_RANGE, PRICE_RANGE):
     closing_values = data[0]
     macd = data[1]
