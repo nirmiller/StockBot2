@@ -15,7 +15,7 @@ from PIL import Image
 import keras
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Flatten, GlobalAveragePooling2D
-from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Conv2D, MaxPooling2D, GlobalMaxPool2D
 from keras import backend as K
 from keras.callbacks import EarlyStopping
 
@@ -190,9 +190,9 @@ class Agent:
 
         model = Sequential()
         model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape_1))
-        model.add(Conv2D(64, kernel_size=(2, 2), activation='relu'))
-        model.add(Conv2D(64, kernel_size=(1, 1), activation='relu'))
-        model.add(Flatten())
+        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        model.add(GlobalMaxPool2D())
         model.add(Dense(256, activation='relu'))
         model.add(Dense(128, activation='relu'))
         model.add(Dense(32, activation='relu'))
