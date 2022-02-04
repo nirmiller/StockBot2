@@ -34,8 +34,8 @@ import numpy as np
 import random
 from collections import deque
 
-TIME_RANGE, PRICE_RANGE = 60, 60
-DATA_POINTS = 500
+TIME_RANGE, PRICE_RANGE = 40, 40
+DATA_POINTS = 300
 
 
 
@@ -173,7 +173,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.99
+        self.gamma = 0.94
         self.epsilon = .9
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
@@ -189,8 +189,8 @@ class Agent:
         input_shape_1 = (self.time_range, self.price_range, 3)
 
         model = Sequential()
-        model.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=input_shape_1))
-        model.add(Conv2D(64, kernel_size=(4, 4), activation='relu'))
+        model.add(Conv2D(32, kernel_size=(1, 1), activation='relu', input_shape=input_shape_1))
+        model.add(Conv2D(64, kernel_size=(2, 2), activation='relu'))
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Flatten())
         model.add(Dense(600, activation='relu'))
