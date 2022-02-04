@@ -190,13 +190,14 @@ class Agent:
 
         model = Sequential()
         model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape_1))
-        model.add(Conv2D(64, kernel_size=(1, 1), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Conv2D(64, kernel_size=(1, 1), activation='relu'))
         model.add(Flatten())
         model.add(Dense(120, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
 
         model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
+        model.summary()
         return model
 
     def act(self, state):
