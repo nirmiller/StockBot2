@@ -173,7 +173,7 @@ class Agent:
         self.is_eval = is_eval
         self.total_inventory = []
 
-        self.gamma = 0.94
+        self.gamma = 0.95
         self.epsilon = .9
         self.epsilon_min = 0
         self.epsilon_decay = 0.995
@@ -190,13 +190,13 @@ class Agent:
 
         model = Sequential()
         model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape_1))
-        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(2, 2), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(1, 1), activation='relu'))
         model.add(Flatten())
         model.add(Dense(300, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
 
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['mse'])
         model.summary()
         return model
 
