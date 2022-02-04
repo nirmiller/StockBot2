@@ -193,7 +193,10 @@ class Agent:
         model.add(Conv2D(64, kernel_size=(2, 2), activation='relu'))
         model.add(Conv2D(64, kernel_size=(1, 1), activation='relu'))
         model.add(Flatten())
-        model.add(Dense(300, activation='relu'))
+        model.add(Dense(256, activation='relu'))
+        model.add(Dense(128, activation='relu'))
+        model.add(Dense(32, activation='relu'))
+
         model.add(Dense(self.action_size, activation='linear'))
 
         model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['mse'])
