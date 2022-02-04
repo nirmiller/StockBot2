@@ -224,6 +224,6 @@ class Agent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
 
-            self.model.fit(state, target_f, epochs=1, verbose=0)
+            self.model.fit(state, target_f, epochs=1)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
