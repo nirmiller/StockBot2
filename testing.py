@@ -1,7 +1,7 @@
 import keras
 from keras.models import load_model
 import os
-from minute_handling_windowed import *
+from minute_handling import *
 
 stock_name, model_name = "PLUG", "/content/drive/MyDrive/StockBot/models/stock_bot_comp/CNN/model_1/model_1_1_25_SPCE"
 
