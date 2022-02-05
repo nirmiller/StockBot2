@@ -92,7 +92,7 @@ for s in stocks:
                 initial_profit = total_profit
                 total_profit += change_equity
                 if change_equity < 0:
-                    reward = change_equity
+                    reward = change_equity / 100
                 else:
                     reward = ((total_profit + equity) / (initial_equity)) * change_equity
 
