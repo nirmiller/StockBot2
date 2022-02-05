@@ -193,8 +193,8 @@ class Agent:
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
         model.add(GlobalMaxPool2D())
-        model.add(Dense(512, activation='relu'))
         model.add(Dense(256, activation='relu'))
+        model.add(Dense(128, activation='relu'))
         model.add(Dense(64, activation='relu'))
 
         model.add(Dense(self.action_size, activation='linear'))
