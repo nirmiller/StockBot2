@@ -35,7 +35,7 @@ import random
 from collections import deque
 
 TIME_RANGE, PRICE_RANGE = 40, 40
-DATA_POINTS = 400
+DATA_POINTS = 500
 
 
 
@@ -186,20 +186,21 @@ class Agent:
         self.model.summary()
 
     def create_model(self):
-        input_shape_1 = (self.time_range, self.price_range, 3)
+        inputs = tf.keras.Input(shape=(TIME_RANGE, PRICE_RANGE, 3))
 
-        model = Sequential()
-        model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape_1))
-        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-        model.add(Flatten())
-        model.add(Dense(512, activation='relu'))
-        model.add(Dense(256, activation='relu'))
-        model.add(Dense(64, activation='relu'))
+        input_shape_1 = (TIME_RANGE, PRICE_RANGE, 3)
 
-        model.add(Dense(self.action_size, activation='linear'))
+        x = tf.keras.applications.mobilenet.MobileNet(weights='imagenet', include_top=False, input_shape=input_shape_1)(
+            inputs)
+        x = Flatten()(x)
+        x = Dense(256, activation='relu')(x)
+        x = Dropout(0.5)(x)
+        x = Dense(64, activation='relu')(x)
+        x = Dropout(0.5)(x)
+        output = Dense(self.action_size, activation='linear')(x)
 
-        model.compile(loss='mse', optimizer=Adam(learning_rate=.0001), metrics=['mse'])
+        model = Model(inputs=inputs, outputs=output)
+        model.compile(loss='mse', optimizer=Adam(learning_rate=1e-6), metrics=['mse'])
         model.summary()
         return model
 
