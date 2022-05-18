@@ -34,7 +34,7 @@ import numpy as np
 import random
 from collections import deque
 
-TIME_RANGE, PRICE_RANGE = 40, 40
+TIME_RANGE, PRICE_RANGE = 50, 50
 DATA_POINTS = 500
 
 
